@@ -2,56 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
 
+    private $paymentService;
 
     public function __construct()
     {
-        $this->user= config('services.members');
-        $this->product= config('services.products');
-        $this->user= config('services.members');
-    }   
-        
-
-    public function index()
-    {
-        $user=$this->user["name"];
-        $price=$this->product["price"];
-        $priceWithVat = $this->vatCalculator($this->product["price"]);
-        $userHasCoupon = $this->couponCalculator($this->user["name"],$this->product["price"]);
-        $priceToPay = $priceWithVat - ($price - $userHasCoupon);
-        $bill = [
-            'user' => $user,
-            'price' => $price,
-            'price with vat' => $priceWithVat,
-            'price with coupon' => $userHasCoupon,
-            'price to pay' => $priceToPay,
-        ];
-
-        dd($bill);
+        $this->paymentService = new PaymentService();
     }
 
-    /* public function storePurchase($statement)
+    public function processPayment()
     {
-      Cache::put('purchase',$statement);
-    } 
- */
+        $this->paymentService
+            ->setPrice(5000)
+            ->priceToPayCalculator();
 
-    public function vatCalculator($price)
-    {
-        return $newPrice = $price + ($price * 18/100);
-    }
-
-    public function couponCalculator($user,$price)
-    {
-        if(in_array($user,$this->user)) {
-            $newPrice = $price - (($price * 5) /100);
-            return $newPrice;
-        }
-        return $price;
+            return view('payments.index',[
+                'priceToPay' => $this->paymentService->priceToPay,
+                'productPrice' => $this->paymentService->price,
+                'priceWithDiscount' => $this->paymentService->priceToPayWithDiscount,
+                'priceWithVat' => $this->paymentService->priceWithVat,
+            ]);
     }
 
 }

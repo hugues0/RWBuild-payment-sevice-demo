@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+<div>
+    <div>Product price: {{$productPrice}}</div>
+    <div>Price on a discount: {{$priceWithDiscount}}</div>
+    <div>Value added tax (VAT):  {{$priceWithVat}}</div>
+    <div>Total price to pay: {{$priceToPay}}</div>
+</div>

@@ -31,14 +31,21 @@ return [
     ],
 
     'products'=> [
-        'price' => 5000,
+        'price' => 5000.00,
         'name' => 'wireless mouse',
         'quantity' => 15,
-        'discount' => 5,
     ],
 
     'coupon' => [
-        'discount' => 5,
+        'value' => 5/100,
+    ],
+
+    'discount' => [
+        'value' => 5/100,
+    ],
+
+    'vat' => [
+        'value' => 18/100,
     ],
 
     'members' => [
