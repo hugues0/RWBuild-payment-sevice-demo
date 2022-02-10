@@ -21,12 +21,15 @@ class PaymentController extends Controller
             ->setPrice(5000)
             ->priceToPayCalculator();
 
-            return view('payments.index',[
-                'priceToPay' => $this->paymentService->priceToPay,
+            $bill=[
                 'productPrice' => $this->paymentService->price,
                 'priceWithDiscount' => $this->paymentService->priceToPayWithDiscount,
-                'priceWithVat' => $this->paymentService->priceWithVat,
-            ]);
+                'VAT' => $this->paymentService->priceWithVat,
+                'priceToPay' => $this->paymentService->priceToPay,
+            ];
+
+            dd($bill);
+
     }
 
 }

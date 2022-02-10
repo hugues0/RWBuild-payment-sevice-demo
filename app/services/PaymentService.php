@@ -31,7 +31,7 @@ class PaymentService{
         return $this;
     }
     
-    // index function to do all the computation and it to controller
+    // index function to do all the computation and return  it to controller
     public function priceToPayCalculator()
     {
         $this->priceToPayWithDiscount = $this->computeCouponDiscount($this->price);
