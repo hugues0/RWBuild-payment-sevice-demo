@@ -16,7 +16,7 @@ class PaymentService{
 
     public $priceWithVat;
 
-    // constructor fucntion for PaymentService class
+    
     public function __construct()
     {
         $this->price=config('services.products');
@@ -24,14 +24,18 @@ class PaymentService{
         $this->couponValue=config('services.coupon');
     }
 
-    //set the original price
+    /**
+     * set the originall price @param price
+     */
     public function setPrice($price)
     {
         $this->price=$price;
         return $this;
     }
     
-    // index function to do all the computation and return  it to controller
+    /**
+     * index function to do all the computation and return  it to controller
+     */
     public function priceToPayCalculator()
     {
         $this->priceToPayWithDiscount = $this->computeCouponDiscount($this->price);
@@ -40,7 +44,9 @@ class PaymentService{
         return $this->priceToPay;            
     }
 
-    // calculate the VAT (value added tax)
+    /**
+     *calculate the VAT (value added tax) 
+     */ 
     public function  vatCalculator(){
         if($this->vatValue['value']) {
          $this->priceWithVat  += ($this->priceToPayWithDiscount * $this->vatValue['value']);
@@ -49,7 +55,9 @@ class PaymentService{
         return $this;
     }
 
-    //calculate a discount at 5%
+    /**
+     * calculate a discount at 5% @param price
+     */
     public function computeCouponDiscount($price)
     {
         if(!$this->couponValue) return $price;

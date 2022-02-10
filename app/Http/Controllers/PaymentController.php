@@ -22,10 +22,10 @@ class PaymentController extends Controller
             ->priceToPayCalculator();
 
             $bill=[
-                'productPrice' => $this->paymentService->price,
-                'priceWithDiscount' => $this->paymentService->priceToPayWithDiscount,
-                'VAT' => $this->paymentService->priceWithVat,
-                'priceToPay' => $this->paymentService->priceToPay,
+                'product_price' => $this->paymentService->price,
+                'price_with_discount' => $this->paymentService->priceToPayWithDiscount,
+                'vat' => $this->paymentService->priceWithVat,
+                'price_to_pay' => $this->paymentService->priceToPay,
             ];
 
             dd($bill);
