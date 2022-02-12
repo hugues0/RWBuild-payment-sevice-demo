@@ -25,7 +25,7 @@ require __DIR__.'/auth.php';
 
 //admin role group
 Route::group(['middleware' => 'is_super_admin'], function() {  
-  Route::put('/users/{id}','App\Http\Controllers\UserController@update');
+  Route::put('/users/{user}','App\Http\Controllers\UserController@update');
 });
 
 

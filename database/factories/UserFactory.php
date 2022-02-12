@@ -18,6 +18,7 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            'id'=>$this->faker->randomDigitNot(0,1),
             'role_id'=>1,
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
