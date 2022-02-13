@@ -43,7 +43,6 @@ class PaymentService{
         $this->discountAmount=0;
         $this->discountedPrice=0;
         $this->amountToPay=0;
-        //dd($this);
     }
 
     
@@ -60,14 +59,12 @@ class PaymentService{
             ->awardPoint();
         $this->amountToPay = $this->loyaltyService->amountToPay;
         return $this;
-        //dd($this);
     }
 
     public function priceWithvatAmountCalculator()
     {
         $this->vatAmount = $this->startPrice * $this->vat;
         $this->amountToPay = $this->startPrice + $this->vatAmount;
-        //dd($this);
         return $this;
     }
 
@@ -79,14 +76,12 @@ class PaymentService{
             $this->amountToPay -= $this->discountAmount;
         }
         $this->discountedPrice=$this->amountToPay;
-        //dd($this);
         return $this;
     }
 
     public function priceWithTransactionFee()
     {
         $this->amountToPay -= $this->transactionFee;
-        //dd($this);
         return $this;
     }
 
@@ -95,8 +90,6 @@ class PaymentService{
         if($this->coupon){
             $this->amountToPay =$this->amountToPay - ($this->amountToPay * $this->coupon);
         }
-        //dd($this);
-
         return $this;
     }
 

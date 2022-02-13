@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Configuration;
 use App\Models\User;
-//use Auth;
 use Illuminate\Support\Facades\Auth;
 
 class LoyaltyService{
@@ -15,31 +14,31 @@ class LoyaltyService{
 
     public $pointsValue;
 
+    public $user;
+
     public function __construct($amountToPay)
     {
         $this->amountToPay = $amountToPay;
         $this->loyaltyPoints = Auth::user()->points;
         $this->pointsValue = Configuration::where('name','points_value')->pluck('value')->first();
+        $this->user=Auth::user()->id;
     }
 
     public function priceWithLoyaltyPoints()
     {
-        //dd($this);
-
         if($this->loyaltyPoints >=10){
             $this->amountToPay -= $this->pointsValue;
             $this->loyaltyPoints -= 10;
+            User::where('id',$this->user)->update(array('points'=>$this->loyaltyPoints));
         }
-        //dd($this);
-
         return $this;
     }
 
     public function awardPoint(){
-        if($this->amountToPay >=2000){
+        if($this->amountToPay >=3000){
             $this->loyaltyPoints +=1;
+            User::where('id',$this->user)->update(array('points'=>$this->loyaltyPoints));
         }
-        Auth::user()->update(['points'=>$this->loyaltyPoints]);
         return $this;
     }
 }
