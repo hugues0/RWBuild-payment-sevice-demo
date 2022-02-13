@@ -17,19 +17,9 @@ class PaymentController extends Controller
 
     public function processPayment()
     {
-        $this->paymentService
-            ->setPrice(5000)
-            ->priceToPayCalculator();
+        $this->paymentService->calculatePriceToPay();
 
-            $bill=[
-                'product_price' => $this->paymentService->price,
-                'price_with_discount' => $this->paymentService->priceToPayWithDiscount,
-                'vat' => $this->paymentService->priceWithVat,
-                'price_to_pay' => $this->paymentService->priceToPay,
-            ];
-
-            dd($bill);
-
+            dd($this->paymentService);
     }
 
 }

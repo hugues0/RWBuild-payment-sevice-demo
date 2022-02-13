@@ -47,5 +47,17 @@ class AdminTest extends TestCase
 
     }
 
-
+    public function test_admin_can_not_change_user_role()
+    {
+        $user=User::factory()->create([
+            'name'=>'hugues',
+            'id'=>3,
+        ]);
+        $this->assertDatabaseHas('users',['name'=>'hugues','role_id'=>1]);
+        $response=$this->actingAs($this->admin)->put('/users/'.$user->id,[
+            'role_id'=>2
+        ]);
+        $response->assertStatus(403);
+        $this->assertDatabaseHas('users',['name'=>'hugues','role_id'=>1]);
+    }
 }

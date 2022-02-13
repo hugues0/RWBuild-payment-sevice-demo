@@ -2,68 +2,102 @@
 
 namespace App\Services;
 
+use App\Models\Configuration;
+use App\Models\Product;
+use Auth;
+
+
+
 class PaymentService{
 
-    public  $price;
+    public LoyaltyService $loyaltyService;
+
+    public Product $product;
     
-    public  $vatValue;
+    public  $startPrice;
+    
+    public  $vat;
 
-    public  $couponValue;
+    public  $vatAmount;
 
-    public  $priceToPay;
+    public  $coupon;
 
-    public $priceToPayWithDiscount;
+    public  $discount;
 
-    public $priceWithVat;
+    public  $discountAmount;
+
+    public  $discountedPrice;
+
+    public  $transactionFee;
+
+    public  $amountToPay;
 
     
     public function __construct()
     {
-        $this->price=config('services.products');
-        $this->vatValue=config('services.vat');
-        $this->couponValue=config('services.coupon');
+        $this->startPrice=Product::where('id',1)->pluck('price')->first();
+        $this->vat=Configuration::where('name','vat')->pluck('value')->first();
+        $this->coupon=Configuration::where('name','coupon')->pluck('value')->first();
+        $this->discount=Configuration::where('name','discount')->pluck('value')->first();
+        $this->transactionFee=Configuration::where('name','transaction_fee')->pluck('value')->first();
+        $this->discountAmount=0;
+        $this->discountedPrice=0;
+        $this->amountToPay=0;
+        //dd($this);
     }
 
-    /**
-     * set the originall price @param price
-     */
-    public function setPrice($price)
-    {
-        $this->price=$price;
-        return $this;
-    }
     
-    /**
-     * index function to do all the computation and return  it to controller
-     */
-    public function priceToPayCalculator()
+    public function calculatePriceToPay()
     {
-        $this->priceToPayWithDiscount = $this->computeCouponDiscount($this->price);
-        $this->vatCalculator();
-        
-        return $this->priceToPay;            
+        $this
+            ->priceWithvatAmountCalculator()
+            ->priceWithdiscountCalculator()
+            ->priceWithTransactionFee()
+            ->priceWithCouponCalculator();
+        $this->loyaltyService = new LoyaltyService($this->amountToPay);
+        $this->loyaltyService
+            ->priceWithLoyaltyPoints()
+            ->awardPoint();
+        $this->amountToPay = $this->loyaltyService->amountToPay;
+        return $this;
+        //dd($this);
     }
 
-    /**
-     *calculate the VAT (value added tax) 
-     */ 
-    public function  vatCalculator(){
-        if($this->vatValue['value']) {
-         $this->priceWithVat  += ($this->priceToPayWithDiscount * $this->vatValue['value']);
-         $this->priceToPay = $this->priceToPayWithDiscount + $this->priceWithVat;
-        }
+    public function priceWithvatAmountCalculator()
+    {
+        $this->vatAmount = $this->startPrice * $this->vat;
+        $this->amountToPay = $this->startPrice + $this->vatAmount;
+        //dd($this);
         return $this;
     }
 
-    /**
-     * calculate a discount at 5% @param price
-     */
-    public function computeCouponDiscount($price)
+    public function priceWithdiscountCalculator()
     {
-        if(!$this->couponValue) return $price;
+        if(Auth::user()->is_member){
+            $this->discountedPrice = $this->amountToPay - ($this->amountToPay * $this->discount);
+            $this->discountAmount= $this->amountToPay - $this->discountedPrice;
+            $this->amountToPay -= $this->discountAmount;
+        }
+        $this->discountedPrice=$this->amountToPay;
+        //dd($this);
+        return $this;
+    }
 
-        return $price-($price * $this->couponValue['value']);
-        
+    public function priceWithTransactionFee()
+    {
+        $this->amountToPay -= $this->transactionFee;
+        //dd($this);
+        return $this;
+    }
+
+    public function priceWithCouponCalculator()
+    {
+        if($this->coupon){
+            $this->amountToPay =$this->amountToPay - ($this->amountToPay * $this->coupon);
+        }
+        //dd($this);
+
+        return $this;
     }
 
 }

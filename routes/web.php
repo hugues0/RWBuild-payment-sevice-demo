@@ -30,7 +30,7 @@ Route::group(['middleware' => 'is_super_admin'], function() {
 
 
 Route::group(['middleware' => 'auth'], function() {  
-  Route::get('/payments','App\Http\Controllers\PaymentController@index');
+  Route::get('/payments','App\Http\Controllers\PaymentController@processPayment');
 });
 
 Route::group(['middleware' => 'is_admin'], function() {  

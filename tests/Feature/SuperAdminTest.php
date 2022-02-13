@@ -22,7 +22,6 @@ class SuperAdminTest extends TestCase
 
     public function test_super_admin_can_update_user_role()
     {
-        $this->withoutExceptionHandling();
         $user=User::factory()->create([
             'name'=>'hugues',
             'id'=>3,
