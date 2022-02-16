@@ -11,8 +11,6 @@ use Auth;
 class PaymentService{
 
     public LoyaltyService $loyaltyService;
-
-    public Product $product;
     
     public  $startPrice;
     
@@ -61,12 +59,20 @@ class PaymentService{
         return $this;
     }
 
+    /**
+     * this function calculates the price to pay with VAT added
+     */
+
     public function priceWithvatAmountCalculator()
     {
         $this->vatAmount = $this->startPrice * $this->vat;
         $this->amountToPay = $this->startPrice + $this->vatAmount;
         return $this;
     }
+
+    /**
+     * this function calculates the amount to pay if logged in user is a member
+     */
 
     public function priceWithdiscountCalculator()
     {
@@ -79,12 +85,19 @@ class PaymentService{
         return $this;
     }
 
+    /**
+     * this function adds transaction fee from amount to pay
+     */
     public function priceWithTransactionFee()
     {
-        $this->amountToPay -= $this->transactionFee;
+        $this->amountToPay += $this->transactionFee;
         return $this;
     }
 
+
+    /**
+     * this function calculates the amount to pay with coupon discount
+     */
     public function priceWithCouponCalculator()
     {
         if($this->coupon){
