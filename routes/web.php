@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MurugoLoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,15 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
 Route::get('/', function () {
-    return view('welcome');
+  return view('welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+  return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+
+
 
 //admin role group
 Route::group(['middleware' => 'is_super_admin'], function() {  
@@ -37,3 +42,7 @@ Route::group(['middleware' => 'is_admin'], function() {
   Route::resource('/configurations','App\Http\Controllers\ConfigurationController');
 });
 
+
+Route::get('/murugo-login', 'App\Http\Controllers\MurugoLoginController@redirectToMurugo')->name('murugo.login');
+
+Route::get('/murugo-callback', 'App\Http\Controllers\MurugoLoginController@murugoCallback')->name('murugo.callback');

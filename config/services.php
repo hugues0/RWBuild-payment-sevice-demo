@@ -30,26 +30,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'products'=> [
-        'price' => 5000.00,
-        'name' => 'wireless mouse',
-        'quantity' => 15,
-    ],
-
-    'coupon' => [
-        'value' => 5/100,
-    ],
-
-    'discount' => [
-        'value' => 5/100,
-    ],
-
-    'vat' => [
-        'value' => 18/100,
-    ],
-
-    'members' => [
-        'name' => 'Hugues',
+    'murugo' => [
+        'client_id' => env('MURUGO_CLIENT_ID'),
+        'client_secret' => env('MURUGO_CLIENT_SECRET'),
+        'redirect' => env('APP_REDIRECT_URL', 'YOUR LOGIN REDIRECT URL'),
+        'murugo_url' => env('MURUGO_URL', 'MURUGO_URL'),
+        'murugo_app_key' => env('MURUGO_APP_KEY'),
     ],
 
 ];

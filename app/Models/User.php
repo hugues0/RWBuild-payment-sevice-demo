@@ -8,11 +8,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Role;
+use RwandaBuild\MurugoAuth\Traits\MurugoAuthHelper;
 
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use MurugoAuthHelper;
 
     /**
      * The attributes that are mass assignable.
@@ -24,7 +26,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
-        'points'
+        'points',
+        'murugo_user_id',
     ];
 
     /**
