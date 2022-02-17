@@ -18,9 +18,8 @@ class ConfigurationPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->isSuperAdmin() || $user->isAdmin();
+        return true;
     }
-
     /**
      * Determine whether the user can view the model.
      *
@@ -30,7 +29,7 @@ class ConfigurationPolicy
      */
     public function view(User $user, Configuration $configuration)
     {
-        return $user->isSuperAdmin() || $user->isAdmin();
+        return true;
     }
 
     /**
@@ -41,7 +40,7 @@ class ConfigurationPolicy
      */
     public function create(User $user)
     {
-        return $user->isAdmin() || $user->isSuperAdmin() ;
+        return true ;
     }
 
     /**
@@ -53,7 +52,7 @@ class ConfigurationPolicy
      */
     public function update(User $user, Configuration $configuration)
     {
-        return $user->isSuperAdmin() || $user->isAdmin();
+        return true;
     }
 
     /**
@@ -77,7 +76,7 @@ class ConfigurationPolicy
      */
     public function restore(User $user, Configuration $configuration)
     {
-        return $user->isSuperAdmin() || $user->isAdmin();
+        return true;
     }
 
     /**

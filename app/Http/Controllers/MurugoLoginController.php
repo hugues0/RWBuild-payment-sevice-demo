@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use RwandaBuild\MurugoAuth\Facades\MurugoAuth;
 use App\Models\User;
@@ -28,6 +29,7 @@ class MurugoLoginController extends Controller
             $user=$murugoUser->user()->create([ //if user not in our database we create him/her from the murugo user relationship
                 'name'=> $murugoUser->name,
             ]);
+            $user->attachRole(Role::IS_USER);
         }
 
         Auth::login($user); //login user in our app 

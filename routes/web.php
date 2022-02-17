@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MurugoLoginController;
+use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,16 +30,16 @@ require __DIR__.'/auth.php';
 
 
 //admin role group
-Route::group(['middleware' => 'is_super_admin'], function() {  
+Route::group(['middleware' => 'role:'.Role::IS_SUPER_ADMIN], function() {  
   Route::put('/users/{user}','App\Http\Controllers\UserController@update');
 });
 
 
-Route::group(['middleware' => 'auth'], function() {  
+Route::group(['middleware' => 'role:'.Role::IS_USER], function() {  
   Route::get('/payments','App\Http\Controllers\PaymentController@processPayment')->name('payments');
 });
 
-Route::group(['middleware' => 'is_admin'], function() {  
+Route::group(['middleware' => 'role:'.Role::IS_ADMIN], function() {  
   Route::resource('/configurations','App\Http\Controllers\ConfigurationController');
 });
 
