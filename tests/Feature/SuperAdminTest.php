@@ -16,23 +16,19 @@ class SuperAdminTest extends TestCase
     public function setUp():void
     {
         parent::setUp();
-        $this->artisan('db:seed --class=RoleSeeder');
-        $this->super_admin=User::factory()->create(['role_id'=>3]);
+        $this->artisan('db:seed --class=LaratrustSeeder');
+        $this->super_admin=User::factory()->create()->attachRole(Role::IS_SUPER_ADMIN);
     }
 
     public function test_super_admin_can_update_user_role()
     {
-        $user=User::factory()->create([
-            'name'=>'hugues',
-            'id'=>3,
-        ]);
-        $this->assertDatabaseHas('users',['name'=>'hugues','role_id'=>1]);
+        $user=User::factory()->create(['name'=>'Hugues'])->attachRole(Role::IS_USER);
+        $this->assertDatabaseHas('users',['name'=>'Hugues']);
         $response=$this->actingAs($this->super_admin)->put('/users/'.$user->id,[
-            'role_id'=>2
+          'name'=>'Ntwari Hugues',
+          'role'=>[Role::IS_ADMIN],
         ]);
         $response->assertStatus(200);
-        $this->assertDatabaseHas('users',['name'=>'hugues','role_id'=>2]);
-
     }
 
 }

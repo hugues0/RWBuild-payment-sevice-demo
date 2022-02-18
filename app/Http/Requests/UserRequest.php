@@ -14,7 +14,7 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'role_id'=>['required']
+            'role.*'=>['required','string']
         ];
     }
 }
