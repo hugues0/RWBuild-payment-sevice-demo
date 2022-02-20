@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 class SiteServiceController extends Controller
 {
 
-    public $token;
+    public array $headers;
 
     public function __construct()
     {
@@ -19,7 +19,7 @@ class SiteServiceController extends Controller
             'scope'=>'',
         ]);
 
-        $this->token=$response->json()['access_token'];
+        $this->headers = array('Accept'=> 'application/json','Authorization'=>'Bearer '.$response->json()['access_token']);
     }
 
     /**
@@ -27,10 +27,9 @@ class SiteServiceController extends Controller
      */
     public function searchLocation()
     {
-        $response=Http::withHeaders([
-            'accept'=>'application/json',
-            'Authorization'=>'Bearer '.$this->token
-        ])->asForm()->post('https://test.siteservices.murugocloud.com/api/v2/search-location',[
+        $response=Http::withHeaders($this->headers)
+            ->asForm()
+            ->post(env('SS_BASE_URL').'search-location',[
             'key'=>'name',
             'entry'=> 'Inema Arts Center'
         ]);
@@ -43,10 +42,9 @@ class SiteServiceController extends Controller
      */
     public function searchOrganization()
     {
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->token
-        ])->asForm()->post('https://test.siteservices.murugocloud.com/api/v2/search-organizations', [
+        $response = Http::withHeaders($this->headers)
+        ->asForm()
+        ->post(env('SS_BASE_URL').'search-organizations', [
             'entry' => 'Klab',
         ]);
 
@@ -58,10 +56,8 @@ class SiteServiceController extends Controller
      */
     public function getApprovedOrganizations()
     {
-        $response=Http::withHeaders([
-            'Accept'=>'application/json',
-            'Authorization' => 'Bearer '.$this->token
-        ])->get('https://test.siteservices.murugocloud.com/api/v2/paginated-organizations');
+        $response=Http::withHeaders($this->headers)
+        ->get(env('SS_BASE_URL').'paginated-organizations');
         
         return $response->json();
     }
@@ -71,10 +67,23 @@ class SiteServiceController extends Controller
      */
     public function getApprovedLocations()
     {
-        $response = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->token
-        ])->get('https://test.siteservices.murugocloud.com/api/v2/paginated-locations');
+        $response = Http::withHeaders($this->headers)
+        ->get(env('SS_BASE_URL').'paginated-locations');
+
+        return $response->json();
+    }
+
+    /**
+     * This function is for submitting an organization
+     */
+    public function submitOrganization()
+    {
+        $response = Http::withHeaders($this->headers)
+        ->asForm()
+        ->post(env('SS_BASE_URL') . 'submit-organization', [
+            'murugo_location_id' => 1378,
+            'name'=>'papa John'
+        ]);
 
         return $response->json();
     }

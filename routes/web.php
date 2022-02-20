@@ -3,6 +3,7 @@
 use App\Http\Controllers\MurugoLoginController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SiteServiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,16 +46,19 @@ Route::group(['middleware' => 'role:'.Role::IS_ADMIN], function() {
 
 //Murugo authentication routes
 
-Route::get('/murugo-login', 'App\Http\Controllers\MurugoLoginController@redirectToMurugo')->name('murugo.login');
+Route::controller(MurugoLoginController::class)->group(function(){
+  Route::get('/murugo-login','redirectToMurugo')->name('murugo.login');
+  Route::get('/murugo-callback', 'murugoCallback')->name('murugo.callback');
 
-Route::get('/murugo-callback', 'App\Http\Controllers\MurugoLoginController@murugoCallback')->name('murugo.callback');
-
+});
 
 // murugo sites services routes 
 
-Route::get('/site-services/approved-organizations', 'App\Http\Controllers\SiteServiceController@getApprovedOrganizations');
-Route::get('/site-services/approved-locations', 'App\Http\Controllers\SiteServiceController@getApprovedLocations');
-Route::get('/site-services/search-location', 'App\Http\Controllers\SiteServiceController@searchLocation');
-Route::get('/site-services/search-organization', 'App\Http\Controllers\SiteServiceController@searchOrganization');
-
-
+Route::controller(SiteServiceController::class)->group(function(){
+  Route::get('/site-services/approved-organizations', 'getApprovedOrganizations');
+  Route::get('/site-services/approved-locations', 'getApprovedLocations');
+  Route::get('/site-services/search-location', 'searchLocation');
+  Route::get('/site-services/search-organization', 'searchOrganization');
+  Route::get('/site-services/submit-organization', 'submitOrganization');
+  
+});
